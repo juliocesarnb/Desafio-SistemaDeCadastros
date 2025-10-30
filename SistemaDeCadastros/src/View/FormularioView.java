@@ -14,15 +14,7 @@ import java.util.Scanner;
 
 //*********** LÓGICA DE EXIBIÇÃO DE FORMULÁRIO ***************
 
-// private String nome;
-//    private String sobrenome;
-//    private TipoPet tipo;
-//    private SexoPet sexo;
-//    private int idade;
-//    private float peso;
-//    private String raca;
-//    private Endereco endereco;
-//    private LocalDateTime dataCadastro;
+
 
 public class FormularioView {
 
