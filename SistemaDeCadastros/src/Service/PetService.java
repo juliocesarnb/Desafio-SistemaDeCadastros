@@ -1,64 +1,67 @@
 package Service;
-
-import Model.Pet;
-
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.time.LocalDateTime;
-
+import java.time.format.DateTimeFormatter;
+import Model.Pet;
 public class PetService {
-    // Preciso salvar um objeto em um arquivo .txt que tenha o seguinte formato
-    // ano, mês, dia,T, hora, minuto - NOME+SOBRENOME em maiúsculo.
-    // Ex: 20231101T1234-FLORZINHADASILVA.TXT. -> COMO?
-
-    // Exemplo do conteúdo do arquivo:
-    //1 - Florzinha da Silva
-    //2 - Gato
-    //3 - Femea
-    //4 - Rua 2, 456, Seilandia
-    //5 - 6 anos
-    //6 - 5kg
-    //7 - Siames
-
-    // O arquivo deverá ser ---- salvo na pasta petsCadastrados na raiz do projeto---
-    // O conteúdo do arquivo deverá conter TODAS AS RESPOSTAS POR LINHA, ou seja, cada resposta deverá estar em uma linha diferente.
-    // O campo endereço deverá ser salvo todo na mesma linha.
-    // O arquivo somente conterá RESPOSTAS, PERGUNTAS NÃO!
-
-
 
     public static boolean salvar(Pet novoPet) {
-        // pasta criada:
-        File file_petsCadastrados = new File("petsCadastrados");
-
-        // BOOLEAN validador de true or false da pasta
-        boolean isPetCadastrados = file_petsCadastrados.mkdir();
-
-        // INICIALIZANDO dados que iram estar no TITULO do arquivo
-        LocalDateTime dataArquivo = novoPet.getDataCadastro();
-        String nomeArquivo = novoPet.getNome().toUpperCase();
-        String sobrenomeArquivo = novoPet.getSobrenome().toUpperCase();
-
-        // arquivo criado:
-        File fileArquivo_petsCadastradados = new File(file_petsCadastrados,  dataArquivo + nomeArquivo + sobrenomeArquivo );
-
-        try (FileWriter fw = new FileWriter(file_petsCadastrados, true);
-             BufferedWriter br = new BufferedWriter(fw)){
-            br.write(novoPet.toString());
-            br.flush();
-        }
-        catch (IOException e) {
-            throw new RuntimeException(e);
+        // Criar pasta "petsCadastrados" se não existir
+        File pastaPets = new File("petsCadastrados");
+        if (!pastaPets.exists()) {
+            boolean created = pastaPets.mkdirs();
+            System.out.println("DEBUG: Pasta criada? " + created);
+        } else {
+            System.out.println("DEBUG: Pasta já existe");
         }
 
-        // boolean validador de true or false do arquivo
-        try {
-            boolean isFileCreated = fileArquivo_petsCadastradados.createNewFile();
+        // Formatar a data para o padrão yyyyMMddTHHmm
+        String dataFormatada = novoPet.getDataCadastro()
+                .format(DateTimeFormatter.ofPattern("yyyyMMdd'T'HHmm"));
+
+        // Concatenar nome e sobrenome em maiúsculo e sem espaços
+        String nomeCompleto = (novoPet.getNome() + novoPet.getSobrenome())
+                .toUpperCase()
+                .replaceAll("\\s+", "");
+
+        // Criar objeto File para o arquivo com nome correto dentro da pasta
+        String nomeArquivo = dataFormatada + "-" + nomeCompleto + ".TXT";
+        File arquivo = new File(pastaPets, nomeArquivo);
+        System.out.println("DEBUG: Arquivo de destino: " + arquivo.getAbsolutePath());
+
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(arquivo))) {
+            // Escreve uma linha por informação, conforme exemplo
+            bw.write("1 - " + novoPet.getNome() + " " + novoPet.getSobrenome());
+            bw.newLine();
+
+            bw.write("2 - " + novoPet.getTipo());
+            bw.newLine();
+
+            bw.write("3 - " + novoPet.getSexo());
+            bw.newLine();
+
+            bw.write("4 - " + novoPet.getEndereco());
+            bw.newLine();
+
+            bw.write("5 - " + novoPet.getIdade());
+            bw.newLine();
+
+            bw.write("6 - " + novoPet.getPeso());
+            bw.newLine();
+
+            bw.write("7 - " + novoPet.getRaca());
+            bw.newLine();
+
+            bw.flush();
+
+            System.out.println("DEBUG: Dados gravados com sucesso");
+            return true;
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            System.out.println("DEBUG: Erro ao gravar arquivo: " + e.getMessage());
+            e.printStackTrace();
+            return false;
         }
-        return isPetCadastrados;
     }
 }
