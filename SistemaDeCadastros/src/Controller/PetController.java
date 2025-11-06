@@ -5,6 +5,8 @@ import Service.PetService;
 import View.MenuView;
 import View.PetRegisterView;
 
+import static View.PetListView.displayList;
+
 public class PetController {
 
     public static void cadastrarPet() {
@@ -62,6 +64,7 @@ public class PetController {
     private static void processarAlteracao() {
     }
     private static void processarListagemCompleta(){
+        displayList();
     }
     private static void processarListagemCriterio(){
 

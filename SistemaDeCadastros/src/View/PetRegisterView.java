@@ -33,14 +33,15 @@ public class PetRegisterView {
             String sobrenomePet = "";
             TipoPet tipoPet = null;
             SexoPet sexoPet = null;
-            int idadePet = 0;
+            double idadePet = 0.0F;
             float pesoPet= 0.0F;
             String racaPet = "";
             Endereco enderecoPet = null;
-            String ruaEndereco = " ";
-            String numeroEndereco = " ";
-            String cidadeEndereco = " ";
-
+            String rua = " ";
+            String numero = " ";
+            String cidade = " ";
+            String regexCaracterEspecial = "^[a-zA-Z]+$";
+            String regexNumeros = "^\\d+$";
 
             File file = new File("/home/julio/IdeaProjects/SistemaDeCadastros/SistemaDeCadastros/src/formulario.txt");
 
@@ -66,11 +67,27 @@ public class PetRegisterView {
                         System.out.print("Escreva primeiro o Nome: ");
                         nomePet = scanner.nextLine();
 
+                        if (nomePet == null || nomePet.trim().isEmpty()) {
+                            throw new IllegalArgumentException("Nome é obrigatório.");
+                        }
+
                         System.out.print("Agora escreva o Sobrenome: ");
                         sobrenomePet = scanner.nextLine();
 
-                        System.out.println("-> Resposta Registrada: " + nomePet + " " + sobrenomePet);
-                        System.out.println("----------------------------------------");
+                        if (sobrenomePet == null || sobrenomePet.trim().isEmpty()) {
+                            throw new IllegalArgumentException("Sobrenome é obrigatório.");
+                        }
+
+                        String nomeCompleto = nomePet + sobrenomePet;
+
+                        if(nomeCompleto.matches(regexCaracterEspecial)){
+                            System.out.println("-> Resposta Registrada: " + nomePet + " " + sobrenomePet);
+                            System.out.println("----------------------------------------");
+                        }
+                        else {
+                            throw new IllegalArgumentException("Nome completo não pode conter caractéres especiais.");
+                        }
+
 
                     }
                     else if (primeiroCaractere == '2') {
@@ -119,35 +136,84 @@ public class PetRegisterView {
 //
 //                  Preciso pegar a resposta do usuário
                         System.out.println("Escreva o nome da sua rua: ");
-                        ruaEndereco = scanner.nextLine();
+                        rua = scanner.nextLine();
 
                         System.out.println("Escreva o numero da sua rua: ");
-                        numeroEndereco = scanner.nextLine();
+                        numero = scanner.nextLine();
 
                         System.out.println("Escreva o nome da sua cidade: ");
-                        cidadeEndereco = scanner.nextLine();
+                        cidade = scanner.nextLine();
 
 
-// ****** Ver se consigo instanciar endereço no CadastroPet
-                        enderecoPet = new Endereco(ruaEndereco, numeroEndereco, cidadeEndereco);
+                        enderecoPet = new Endereco(rua, numero, cidade);
 
                         System.out.println(enderecoPet.toString());
                     }
 
                     else if (primeiroCaractere == '5') {
                         System.out.println("-------------------------------");
-                        System.out.println(linha); // Idade
-                        System.out.print("Resposta: ");
-                        // Tratamento de erro básico para números
-                        try {
-                            idadePet = Integer.parseInt(scanner.nextLine());
-                        } catch (NumberFormatException e) {
-                            System.out.println("Entrada inválida. Idade definida como 0.");
-                            idadePet = 0;
-                        }
-                        System.out.println("Idade: " + idadePet);
+                        System.out.println(linha); // 5. Idade
+                        System.out.print("Resposta (em anos. Use vírgula ou ponto): ");
 
+                        // Variável para armazenar a entrada do usuário
+                        String resposta = scanner.nextLine().replace(',', '.');
+                        float idadeLida = 0.0F;
+
+                        try {
+                            idadeLida = Float.parseFloat(resposta);
+                        } catch (NumberFormatException e) {
+                            // Se falhar a conversão para Float (usuário digitou letras), usa o padrão 0.
+                            System.out.println("Entrada inválida. Idade definida como 0 (Não Informado).");
+                            idadeLida = 0.0F;
+                        }
+
+                        if (idadeLida > 20.0f) {
+                            throw new IllegalArgumentException("Idade máxima permitida é 20 anos.");
+                        }
+
+                        // --- Início da Lógica de Conversão Solicitada ---
+
+                        // 1. Obter a parte inteira (Anos)
+                        int anos = (int) idadeLida;
+
+                        // 2. Obter a parte decimal (Meses, como um dígito)
+                        //    a) Subtrair a parte inteira para isolar o decimal (Ex: 1.2 - 1 = 0.2)
+                        //    b) Multiplicar por 10 e arredondar para o inteiro mais próximo (Ex: 0.2 * 10 = 2)
+                        int meses = Math.round((idadeLida - anos) * 10);
+
+                        // Ajuste para casos como 0.99 que podem arredondar para 10, mas devem ser 9
+                        if (meses == 10) {
+                            meses = 9;
+                        }
+
+                        // 3. Formatar a saída
+                        String idadeFormatada;
+                        if (anos > 0 && meses > 0) {
+                            // Ex: 1 ano e 2 meses
+                            idadeFormatada = String.format("%d ano%s e %d mese%s",
+                                    anos, (anos > 1 ? "s" : ""),
+                                    meses, (meses > 1 ? "s" : ""));
+                        } else if (anos > 0) {
+                            // Ex: 1 ano
+                            idadeFormatada = String.format("%d ano%s", anos, (anos > 1 ? "s" : ""));
+                        } else if (meses > 0) {
+                            // Ex: 4 meses (para entradas como 0.4)
+                            idadeFormatada = String.format("%d mese%s", meses, (meses > 1 ? "s" : ""));
+                        } else {
+                            // Ex: 0 (para entrada 0.0)
+                            idadeFormatada = "0 (Não Informado)";
+                        }
+
+                        // Você pode usar 'idadeLida' como a idade do pet em anos no formato 1.2, se precisar desse valor.
+                         idadePet = idadeLida;
+
+                        // Imprimindo a saída solicitada
+                        System.out.printf("Idade convertida de %.1f anos, para %s.\n", idadeLida, idadeFormatada);
+
+                        // Linha final do seu código
+                        System.out.println("Idade: " + idadeFormatada);
                     }
+
                     else if (primeiroCaractere == '6') {
                         System.out.println("-------------------------------");
                         System.out.println(linha); // Peso
@@ -156,9 +222,12 @@ public class PetRegisterView {
                         try {
                             pesoPet = Float.parseFloat(scanner.nextLine());
                         } catch (NumberFormatException e) {
-                            System.out.println("Entrada inválida. Peso definido como 0.0.");
-                            pesoPet = 0.0F;
+                            if (pesoPet < 0.5f || pesoPet > 60.0f) {
+                                throw new AssertionError("Erro: Peso inválido");
+                            }
                         }
+
+
                         System.out.println("Peso: " + pesoPet);
 
                     }
@@ -168,6 +237,13 @@ public class PetRegisterView {
                         System.out.print("Resposta: ");
                         racaPet = scanner.nextLine();
                         System.out.println("Raça: " + racaPet);
+                        if(racaPet.matches(regexCaracterEspecial)){
+                            System.out.println("-> Resposta Registrada: " + nomePet + " " + sobrenomePet);
+                            System.out.println("----------------------------------------");
+                        }
+                        else {
+                            throw new IllegalArgumentException("raça não pode conter caractéres especiais nem números.");
+                        }
 
                     }
                 }
