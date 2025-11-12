@@ -65,9 +65,6 @@ public class PetListView {
                     }
                 }
 
-//                Ordenar pela hora de cadastro (RegistrationTime numérica)
-//                Essa linha ordena a lista listaPets em ordem crescente da hora de cadastro (registrationTime).
-//                Mas ela faz isso de uma forma bem “Java moderna”, usando Lambda e Comparator.
                 Collections.sort(listaPets, Comparator.comparingInt(p -> Integer.parseInt(p.registrationTime)));
 
 //                      Forma manual (sem Comparator)

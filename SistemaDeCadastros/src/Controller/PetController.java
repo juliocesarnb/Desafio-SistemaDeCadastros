@@ -1,10 +1,12 @@
 package Controller;
 
 import Model.Pet;
-import Service.PetService;
+import Service.PetStorage;
 import View.MenuView;
 import View.PetRegisterView;
+import java.util.Scanner;
 
+import static View.PetCriterionView.displayCriterioList;
 import static View.PetListView.displayList;
 
 public class PetController {
@@ -13,7 +15,7 @@ public class PetController {
         Pet novoPet = PetRegisterView.exibirFormulario();
 
         if (novoPet != null) {
-            boolean sucesso = PetService.salvar(novoPet);
+            boolean sucesso = PetStorage.salvar(novoPet);
             System.out.println(sucesso ? "✓ Pet cadastrado!" : "✗ Erro ao cadastrar");
         }
     }
@@ -62,12 +64,25 @@ public class PetController {
     private static void processarDelecao() {
     }
     private static void processarAlteracao() {
+        System.out.println("Você quer listar todos os pets? Se SIM, aperte 1 ou 2 para listar por algum critério");
+        Scanner scanner = new Scanner(System.in);
+        int opcao = scanner.nextInt();
+
+        if (opcao == 1) {
+            displayList();
+        }
+        else if (opcao == 2) {
+            displayCriterioList();
+        }
+        else {
+            System.out.println("Erro");
+        }
     }
     private static void processarListagemCompleta(){
-        displayList();
+
     }
     private static void processarListagemCriterio(){
-
+            
     }
 
     private static void processarCadastro() {
@@ -75,7 +90,7 @@ public class PetController {
 
         if (novoPet != null) {
             // Chama o Service para validar e salvar
-            boolean sucesso = PetService.salvar(novoPet);
+            boolean sucesso = PetStorage.salvar(novoPet);
 
             if (sucesso) {
                 System.out.println("\n✓ Pet cadastrado com sucesso!");
