@@ -6,8 +6,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class PetListView {
-
+public class BuscaView {
     // Classe auxiliar interna para armazenar nome + hora
     static class PetInfo {
         String name;
@@ -95,5 +94,4 @@ public class PetListView {
             System.out.println("O caminho fornecido não é um diretório válido.");
         }
     }
-
 }

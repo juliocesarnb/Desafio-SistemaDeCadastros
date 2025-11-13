@@ -5,7 +5,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
 import Model.Pet;
-public class PetStorage {
+public class PetService {
 
     public static boolean salvar(Pet novoPet) {
         // Criar pasta "petsCadastrados" se não existir

@@ -1,0 +1,7 @@
+1 - null
+2 - CACHORRO
+3 - MACHO
+4 - maria, 22, fortal
+5 - 10.0 anos
+6 - 10.0kg
+7 - pitbull

@@ -6,10 +6,11 @@ public class Pet {
 
     private String nome;
     private String sobrenome;
+    private String nomeCompleto;
     private TipoPet tipo;
     private SexoPet sexo;
     private double idade;
-    private float peso;
+    private double peso;
     private String raca;
     private Endereco endereco;
     private LocalDateTime dataCadastro;
@@ -17,69 +18,101 @@ public class Pet {
     // Constante para valores não informados
     public static final String NAO_INFORMADO = "NÃO INFORMADO";
 
+    public String getNomeCompleto() {
+        return nomeCompleto;
+    }
+
+    public void setNomeCompleto(String nomeCompleto) {
+        this.nomeCompleto = nomeCompleto;
+    }
+
     //Construtor
-    public Pet(String nome, String sobrenome, Endereco endereco, TipoPet tipo, SexoPet sexo, double idade, float peso, String raca) {
-        this.endereco = endereco;
-        this.nome = nome != null && !nome.isBlank() ? nome : Pet.NAO_INFORMADO;
-        this.sobrenome = sobrenome != null && !sobrenome.isBlank() ? sobrenome : Pet.NAO_INFORMADO;
+    public Pet() {
+        this.endereco = null;
+        this.nome = null;
+        this.sobrenome = null;
+        this.nomeCompleto = null;
         this.tipo = tipo;
         this.sexo = sexo;
         this.idade = idade;
         this.peso = peso;
-        this.raca =  raca != null && !raca.isBlank() ? raca : Pet.NAO_INFORMADO;
-        // 1. Inicializa o campo dataCadastro
+        this.raca = null;
         this.dataCadastro = LocalDateTime.now();
     }
 
     // Getters and Setters
-    public Endereco getEndereco() {
-        return endereco;
-    }
+
 
     public String getNome() {
         return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
     public String getSobrenome() {
         return sobrenome;
     }
 
+    public void setSobrenome(String sobrenome) {
+        this.sobrenome = sobrenome;
+    }
+
     public TipoPet getTipo() {
         return tipo;
+    }
+
+    public void setTipo(TipoPet tipo) {
+        this.tipo = tipo;
     }
 
     public SexoPet getSexo() {
         return sexo;
     }
 
-    // Na idade e peso aproximados do pet,
-    // o usuário poderá digitar números com vírgulas ou ponto, mas somente números.
+    public void setSexo(SexoPet sexo) {
+        this.sexo = sexo;
+    }
+
     public double getIdade() {
         return idade;
     }
 
-    public float getPeso() {
+    public void setIdade(double idade) {
+        this.idade = idade;
+    }
+
+    public double getPeso() {
         return peso;
+    }
+
+    public void setPeso(double peso) {
+        this.peso = peso;
     }
 
     public String getRaca() {
         return raca;
     }
 
+    public void setRaca(String raca) {
+        this.raca = raca;
+    }
+
+    public Endereco getEndereco() {
+        return endereco;
+    }
+
+    public void setEndereco(Endereco endereco) {
+        this.endereco = endereco;
+    }
+
+    public void setDataCadastro(LocalDateTime dataCadastro) {
+        this.dataCadastro = dataCadastro;
+    }
+
     public LocalDateTime getDataCadastro() { return dataCadastro; }
 
-    @Override
-    public String toString() {
-        return "Pet{" +
-                "endereco=" + endereco +
-                ", nome='" + nome + '\'' +
-                ", sobrenome='" + sobrenome + '\'' +
-                ", tipo=" + tipo +
-                ", sexo=" + sexo +
-                ", idade=" + idade +"anos"+
-                ", peso=" + peso +"kg"+
-                ", raca='" + raca + '\'' +
-                ", dataCadastro=" + dataCadastro +
-                '}';
-    }
+    // ******** FIM DOS GETTERS AND SETTERS
+
 }
